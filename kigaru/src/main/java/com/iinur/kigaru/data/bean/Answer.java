@@ -10,6 +10,9 @@ public class Answer {
 	private String name;
 	private String text;
 	private Timestamp created_at;
+	private int good;
+	private int bad;
+	
 	public int getId() {
 		return id;
 	}
@@ -45,5 +48,17 @@ public class Answer {
 	}
 	public void setCreated_at(Timestamp created_at) {
 		this.created_at = created_at;
+	}
+	public int getGood() {
+		return good;
+	}
+	public void setGood(int good) {
+		this.good = good;
+	}
+	public int getBad() {
+		return bad;
+	}
+	public void setBad(int bad) {
+		this.bad = bad;
 	}
 }

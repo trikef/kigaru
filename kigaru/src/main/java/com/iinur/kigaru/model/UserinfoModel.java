@@ -37,4 +37,9 @@ public class UserinfoModel {
 			return false;
 		}
 	}
+	
+	public int getId(String name){
+		UserinfoDao udao = new UserinfoDao();
+		return udao.getId(name);
+	}
 }

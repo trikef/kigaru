@@ -15,6 +15,11 @@ public class AnswerModel {
 		return adao.get(voiceId);
 	}
 	
+	public Answer getSingle(int answerId){
+		AnswerDao adao = new AnswerDao();
+		return adao.getSingle(answerId);
+	}
+	
 	public void registration(int voiceId, String name, String text){
 		int userId = 0;
 		if(!StringUtils.isEmpty(name)){

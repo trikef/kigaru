@@ -21,6 +21,7 @@ CREATE TABLE voice(
 	unbalance_8 BOOLEAN,
 	unbalance_9 BOOLEAN,
 	unbalance_10 BOOLEAN,
+	monster VARCHAR(30),
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY(id)
 );
@@ -38,12 +39,34 @@ CREATE TABLE user_info(
 	PRIMARY KEY(id)
 );
 
+DROP TABLE IF EXISTS monster;
+CREATE TABLE monster(
+	name VARCHAR(30),
+	melancholy INTEGER,
+	sad INTEGER,
+	worry INTEGER,
+	angry INTEGER,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY(name)
+);
+
 DROP TABLE IF EXISTS answer;
 CREATE TABLE answer(
 	id SERIAL,
 	voice_id INTEGER NOT NULL,
 	text TEXT NOT NULL,
 	user_id INTEGER,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY(id)
+);
+
+DROP TABLE IF EXISTS answer_value;
+CREATE TABLE answer_value(
+	id SERIAL,
+	answer_id INTEGER NOT NULL,
+	user_id INTEGER NOT NULL,
+	good INTEGER,
+	bad INTEGER,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY(id)
 );

@@ -14,6 +14,7 @@
 	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 	<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+	<script src="/js/main.js"></script>
 </head>
 <body>
 <div data-role="page" id="testpage">
@@ -40,15 +41,9 @@
 			</div>
 			<div class="status">
 				<div class="status-left">
-					<img src="/img/monster/monster-melancholy.jpg">
+					<img src="/img/monster/monster-<s:property value="voice.monster" />.jpg">
 				</div>
 				<div class="status-center">
-<!-- 
-				<p>憂鬱:<s:property value="voice.melancholy" />%</p>
-				<p>悲し:<s:property value="voice.sad" />%</p>
-				<p>不安:<s:property value="voice.worry" />%</p>
-				<p>怒り:<s:property value="voice.angry" />%</p>
--->
 					<p>憂</p>
 					<div class="progress">
 					  <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="<s:property value="voice.melancholy" />" aria-valuemin="0" aria-valuemax="100" style="width: <s:property value="voice.melancholy" />%">
@@ -109,7 +104,7 @@
 				<s:if test="voice.unbalance_10"><P>->unbalance_10</P></s:if>
 			</div>
 		</div>
-		<h2>ポジティブコメントでやっつけよう！</h2>
+		<h2>せんとうかいし！</h2>
 		<div class="ui-corner-all custom-corners ui-block">
 			<div class="ui-bar ui-bar-a">
 				<h3>ポジティブヒント：モンスターの隠れたいいところ</h3>
@@ -127,21 +122,6 @@
 				<s:if test="voice.unbalance_10"><P>->unbalance_10</P></s:if>
 			</div>
 		</div>
-<!--
-		<form action="/voicedisprove" method="post">
-			<input type="hidden" name="name" value="<s:property value="name" />" />
-			<input type="hidden" name="id" value="<s:property value="voice.id" />" />
-			<h4><small>攻撃コメント</small></h4>
-			<textarea rows="10" cols="40" name="disprove" class="form-control" placeholder="反証"></textarea>
-			<span>200</span> 
-			<h4><small>プラン</small></h4>
-			<textarea rows="10" cols="40" name="plan" class="form-control" placeholder="プラン"></textarea>
-			<span>200</span>
-			<span class="input-group-btn">
-				<button type="submit" class="btn btn-default">完了</button>
-			</span>
-		</form>
--->
 		<s:if test="as.size() > 0" >
 		<h4>攻撃の記録</h4>
 		<ul class="comment">
@@ -154,21 +134,31 @@
 						<s:if test="%{#a.name==ownName}">あなた</s:if>
 						<s:else><a href=""><s:property value="#a.name" /></a></s:else>
 						<s:date name="#a.created_at" format="yyyy-MM-dd HH:mm" />
-						<a href="#atack-comment" data-ajax=”false”>返信する</a>
+						<a href="#command-comment" data-rel="popup" data-transition="pop">返信する</a>
 					</div>
 					<div class="comment-text">
 						<s:property value="#a.text" />
 					</div>
 					<div class="comment-footer">
-						<a href="">いいね！(10)</a>
-						<a href="">うーん...(7)</a>
+						<a onClick="Answer.count(<s:property value="#a.id" />,'<s:property value="ownName" />',1,0,'#good<s:property value="#a.id"/>','good')" class="">グッド！(<span id="good<s:property value="#a.id"/>"><s:property value="#a.good"/></span>)</a>
+						<a onClick="Answer.count(<s:property value="#a.id" />,'<s:property value="ownName" />',0,1,'#bad<s:property value="#a.id"/>','bad')" class="">バッド！(<span id="bad<s:property value="#a.id"/>"><s:property value="#a.bad"/></span>)</a>
 					</div>
 				</div>
 			</li>
 		</s:iterator>
 		</ul>
 		</s:if>
-		<form action="/voice/<s:property value="voice.id" />" method="post">
+		<div class="command-tab"><h3><s:property value="name" /></h3></div>
+		<ul id="command-menu" data-role="listview" data-inset="true">
+			<li><a href="#command-comment" data-rel="popup" data-transition="pop">こうげき</a></li>
+			<li><a href="#command-plan">さくせん</a></li>
+			<li><a href="#command-sympathy">きょうかん</a></li>
+			<li><a href="/">にげる</a></li>
+		</ul>
+	</div>
+	<div data-role="panel" id="command-comment" data-position="right" data-display="overlay" data-theme="a" class="ui-panel ui-panel-position-right ui-panel-display-overlay ui-body-a ui-panel-animate ui-panel-closed">
+		<div class="ui-panel-inner">
+			<form action="/voice/<s:property value="voice.id" />" method="post">
      	<div data-role="popup" id="popupInfo-comment" class="ui-content" data-theme="a" style="max-width:350px;">
 			<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
 		  <p><strong>例1. </strong>突然理由も言わずに別れを言うなんてひどい人間だ。そんな人と結婚する前に別れられて良かったんじゃないかな。</p>
@@ -176,7 +166,7 @@
 		  <p><strong>例3. </strong>店員は忙しくてついコーヒーを煮詰めてしまったのかも。Twitterで拡散して店が潰れたらあなたも後味の悪い事になってたかもしれないし文句を言わなくて良かったかも</p>
 		</div>
 		<div id="atack-comment" class="ui-field-contain">
-			<label for="textarea">ポジティブコメントで攻撃！
+			<label for="text">ポジティブコメント！
 			<a href="#popupInfo-comment" data-rel="popup" data-transition="pop" class="ui-mini">ヒント</a>
 			</label>
 			<textarea rows="10" cols="40" name="text" class="form-control"
@@ -185,9 +175,23 @@
 		</div>
 		<input type="hidden" name="name" value="<s:property value="name" />">
 		<span class="input-group-btn">
-				<button type="submit" class="btn btn-default">攻撃する！</button>
+				<button type="submit" class="btn btn-default">こうげきする！</button>
 			</span>
 		</form>
+			<a href="#demo-links" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left ui-btn-inline">もどる</a>
+		</div>
+	</div>
+	<div data-role="panel" id="command-plan" data-position="right" data-display="overlay" data-theme="a" class="ui-panel ui-panel-position-right ui-panel-display-overlay ui-body-a ui-panel-animate ui-panel-closed">
+		<div class="ui-panel-inner">
+			coming soon
+			<a href="#demo-links" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left ui-btn-inline">もどる</a>
+		</div>
+	</div>
+	<div data-role="panel" id="command-sympathy" data-position="right" data-display="overlay" data-theme="a" class="ui-panel ui-panel-position-right ui-panel-display-overlay ui-body-a ui-panel-animate ui-panel-closed">
+		<div class="ui-panel-inner">
+			coming soon
+			<a href="#demo-links" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left ui-btn-inline">もどる</a>
+		</div>
 	</div>
 </div>
 </body>

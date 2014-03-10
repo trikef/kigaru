@@ -67,7 +67,7 @@
 	padding: 0;
 }
 .comment-header{
-	font-size: 90%;
+	font-size: 70%;
 }
 .comment-text{
 }
@@ -77,6 +77,18 @@
 	border-bottom-color: #e5e5e5;
 	text-align: right;
 	padding-bottom: 5px;
+}
+.comment-footer a{
+	font-size: 80%;
+	width: 100px;
+}
+.command-tab{
+	position: relative;
+	top: 20px;
+	left: 90px;
+	z-index: 1;
+	max-width: 100px;
+	background-color: white;
 }
 .ui-btn.my-tooltip-btn,
 .ui-btn.my-tooltip-btn:hover,
@@ -90,7 +102,7 @@ progress {
   vertical-align: baseline;
 }
 .progress {
-  height: 20px;
+  height: 13px;
   margin-bottom: 20px;
   overflow: hidden;
   background-color: #f5f5f5;
@@ -102,8 +114,8 @@ progress {
   float: left;
   width: 0;
   height: 100%;
-  font-size: 12px;
-  line-height: 20px;
+  font-size: 8px;
+  line-height: 13px;
   color: #fff;
   text-align: center;
   background-color: #428bca;

@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.iinur.kigaru.data.VoiceDao;
 import com.iinur.kigaru.data.UserinfoDao;
+import com.iinur.kigaru.data.VoiceDao;
 import com.iinur.kigaru.data.bean.Voice;
 
 public class VoiceModel {
@@ -32,8 +32,8 @@ public class VoiceModel {
 			userId = udao.getId(name);
 		}
 
-		VoiceDao ndao = new VoiceDao();
-		ndao.insert(title, text, userId);
+		VoiceDao vdao = new VoiceDao();
+		vdao.insert(title, text, userId);
 	}
 
 	public void registration(String who, String place, String title,
@@ -46,12 +46,14 @@ public class VoiceModel {
 		if (!StringUtils.isEmpty(name)) {
 			userId = udao.getId(name);
 		}
+		MonsterModel mmodel = new MonsterModel();
+		String monster = mmodel.similar(melancholy, sad, worry, angry);
 
-		VoiceDao ndao = new VoiceDao();
-		ndao.insert(who, place, title, text, userId, melancholy, sad, worry,
+		VoiceDao vdao = new VoiceDao();
+		vdao.insert(who, place, title, text, userId, melancholy, sad, worry,
 				angry, think, unbalance_1, unbalance_2, unbalance_3,
 				unbalance_4, unbalance_5, unbalance_6, unbalance_7,
-				unbalance_8, unbalance_9, unbalance_10);
+				unbalance_8, unbalance_9, unbalance_10, monster);
 	}
 
 	public int count(String name) {

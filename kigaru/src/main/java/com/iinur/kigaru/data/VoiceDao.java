@@ -24,9 +24,10 @@ public class VoiceDao extends BaseDao {
 		sql.append("SELECT ");
 		sql.append("v.id, v.user_id, v.who, v.place, v.title, v.text, v.melancholy, v.sad, v.worry, v.angry, v.think, ");
 		sql.append("v.unbalance_1, v.unbalance_2, v.unbalance_3, v.unbalance_4, v.unbalance_5, v.unbalance_6, v.unbalance_7, v.unbalance_8, v.unbalance_9, v.unbalance_10, ");
-		sql.append("v.created_at, u.name ");
+		sql.append("v.monster, v.created_at, u.name, a.answernum ");
 		sql.append("FROM voice v ");
 		sql.append("LEFT JOIN user_info u ON v.user_id = u.id ");
+		sql.append("LEFT JOIN (SELECT voice_id, count(*) as answernum FROM answer GROUP BY voice_id) a ON v.id = a.voice_id ");
 		sql.append("WHERE v.id = ?");
 
 		Voice n = null;
@@ -45,9 +46,10 @@ public class VoiceDao extends BaseDao {
 		sql.append("SELECT ");
 		sql.append("v.id, v.user_id, v.who, v.place, v.title, v.text, v.melancholy, v.sad, v.worry, v.angry, v.think, ");
 		sql.append("v.unbalance_1, v.unbalance_2, v.unbalance_3, v.unbalance_4, v.unbalance_5, v.unbalance_6, v.unbalance_7, v.unbalance_8, v.unbalance_9, v.unbalance_10, ");
-		sql.append("v.created_at, u.name ");
+		sql.append("v.monster, v.created_at, u.name, a.answernum ");
 		sql.append("FROM voice v ");
 		sql.append("LEFT JOIN user_info u ON v.user_id = u.id ");
+		sql.append("LEFT JOIN (SELECT voice_id, count(*) as answernum FROM answer GROUP BY voice_id) a ON v.id = a.voice_id ");
 		sql.append("WHERE v.id <= (SELECT max(id) FROM voice)-? ORDER BY v.id DESC LIMIT ?");
 
 		List<Voice> ns = null;
@@ -68,10 +70,11 @@ public class VoiceDao extends BaseDao {
 		sql.append("SELECT ");
 		sql.append("vi.id, vi.user_id, vi.who, vi.place, vi.title, vi.text, vi.melancholy, vi.sad, vi.worry, vi.angry, vi.think, ");
 		sql.append("vi.unbalance_1, vi.unbalance_2, vi.unbalance_3, vi.unbalance_4, vi.unbalance_5, vi.unbalance_6, vi.unbalance_7, vi.unbalance_8, vi.unbalance_9, vi.unbalance_10, ");
-		sql.append("vi.created_at, ui.name, ");
+		sql.append("vi.monster, vi.created_at, ui.name, a.answernum, ");
 		sql.append("ROW_NUMBER() OVER (PARTITION BY ui.name ORDER BY ui.name ASC) as nid ");
 		sql.append("FROM voice vi ");
 		sql.append("LEFT JOIN user_info ui ON vi.user_id = ui.id ");
+		sql.append("LEFT JOIN (SELECT voice_id, count(*) as answernum FROM answer GROUP BY voice_id) a ON vi.id = a.voice_id ");
 		sql.append("WHERE ui.name = ?) v ");
 		sql.append("ORDER BY v.id DESC");
 
@@ -101,19 +104,19 @@ public class VoiceDao extends BaseDao {
 			int userId, int melancholy, int sad, int worry, int angry,
 			String think, boolean unbalance_1, boolean unbalance_2, boolean unbalance_3,
 			boolean unbalance_4, boolean unbalance_5, boolean unbalance_6, boolean unbalance_7,
-			boolean unbalance_8, boolean unbalance_9, boolean unbalance_10) {
+			boolean unbalance_8, boolean unbalance_9, boolean unbalance_10, String monster) {
 		StringBuffer sql = new StringBuffer();
 		sql.append("INSERT INTO voice (");
 		sql.append("who, place, title, text, user_id, melancholy, sad, worry, angry, think,");
-		sql.append("unbalance_1, unbalance_2, unbalance_3, unbalance_4, unbalance_5, unbalance_6, unbalance_7, unbalance_8, unbalance_9, unbalance_10");
-		sql.append(") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+		sql.append("unbalance_1, unbalance_2, unbalance_3, unbalance_4, unbalance_5, unbalance_6, unbalance_7, unbalance_8, unbalance_9, unbalance_10, monster");
+		sql.append(") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
 		try {
 			run.update(sql.toString(), who, place, title, text, userId,
 					melancholy, sad, worry, angry, think, unbalance_1,
 					unbalance_2, unbalance_3, unbalance_4, unbalance_5,
 					unbalance_6, unbalance_7, unbalance_8, unbalance_9,
-					unbalance_10);
+					unbalance_10,monster);
 		} catch (SQLException sqle) {
 			log.error(sqle.getMessage());
 			throw new RuntimeException(sqle.toString());

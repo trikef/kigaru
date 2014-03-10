@@ -25,8 +25,10 @@ public class Voice {
 	private boolean unbalance_8;
 	private boolean unbalance_9;
 	private boolean unbalance_10;
+	private String monster;
 	private Timestamp created_at;
 	private String name;
+	private int answernum;
 
 	public int getId() {
 		return id;
@@ -154,6 +156,12 @@ public class Voice {
 	public void setUnbalance_10(boolean unbalance_10) {
 		this.unbalance_10 = unbalance_10;
 	}
+	public String getMonster() {
+		return monster;
+	}
+	public void setMonster(String monster) {
+		this.monster = monster;
+	}
 	public Timestamp getCreated_at() {
 		return created_at;
 	}
@@ -165,5 +173,11 @@ public class Voice {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public int getAnswernum() {
+		return answernum;
+	}
+	public void setAnswernum(int answernum) {
+		this.answernum = answernum;
 	}
 }

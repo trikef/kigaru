@@ -26,10 +26,14 @@
 		<h1>Mind Monsters！</h1>
 	</div><!-- /header -->
 	<div class="ui-content" role="main">
-		<h3>モンスターがうまれた！</h3>
-		<a href="/voice/<s:property value="voice.id" />" class="ui-btn ui-corner-all ui-shadow ui-btn-active">自分でモンスターを倒す！</a>
-		<a href="/voiceorder" class="ui-btn ui-corner-all ui-shadow ui-btn-active">冒険者とモンスターを倒す！</a>
-		<a href="/userchoice" class="ui-btn ui-corner-all ui-shadow ui-btn-active">好きな冒険者に討伐依頼！</a>
+		<div class="monster-main">
+			<h3>モンスターがうまれた！</h3>
+			<img src="/img/monster/monster-<s:property value="voice.monster" />.jpg" />
+			<h4><s:property value="voice.monster" /></h4>
+		</div>
+		<a href="/voice/<s:property value="voice.id" />" class="ui-btn ui-corner-all ui-shadow ui-btn-active">モンスターを倒す！</a>
+		<!-- <a href="/voiceorder" class="ui-btn ui-corner-all ui-shadow ui-btn-active">冒険者とモンスターを倒す！</a> -->
+		<!-- <a href="/userchoice" class="ui-btn ui-corner-all ui-shadow ui-btn-active">好きな冒険者に討伐依頼！</a> -->
 	</div>
 </body>
 </html>

@@ -90,6 +90,12 @@
 	max-width: 100px;
 	background-color: white;
 }
+.monster-main{
+	text-align: center;
+}
+.monster-main img{
+	width: 150px;
+}
 .ui-btn.my-tooltip-btn,
 .ui-btn.my-tooltip-btn:hover,
 .ui-btn.my-tooltip-btn:active {

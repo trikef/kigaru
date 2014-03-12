@@ -14,7 +14,7 @@ import org.apache.struts2.convention.annotation.Results;
 //Actionクラスの結果。type=jsonでJSON形式
 @Results({
 @Result(name="success" , type="json" ,
-       params={"root","answer" , "ignoreHierarchy","false"}),
+       params={"root","answer", "ignoreHierarchy","false"}),
 })
 public class AnswervalueAction extends ActionSupport{
 
@@ -31,12 +31,15 @@ public class AnswervalueAction extends ActionSupport{
 	public void setAnswer(Answer answer) {
 		this.answer = answer;
 	}
+	
 	public String execute(){
 		AnswervalueModel avmodel = new AnswervalueModel();
 		avmodel.registration(i, n, g, b);
-		
+				
 		AnswerModel amodel = new AnswerModel();
 		this.answer = amodel.getSingle(i);
+		this.answer.setAttack(AnswervalueModel.VALUE_ATTACK);
+		this.answer.setRegi(avmodel.contains);
 		return SUCCESS;
 	}
 	

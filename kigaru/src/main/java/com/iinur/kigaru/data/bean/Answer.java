@@ -12,6 +12,9 @@ public class Answer {
 	private Timestamp created_at;
 	private int good;
 	private int bad;
+	private int hp_state;
+	private int attack;
+	private boolean regi;
 	
 	public int getId() {
 		return id;
@@ -60,5 +63,23 @@ public class Answer {
 	}
 	public void setBad(int bad) {
 		this.bad = bad;
+	}
+	public int getHp_state() {
+		return hp_state;
+	}
+	public void setHp_state(int hp_state) {
+		this.hp_state = hp_state;
+	}
+	public int getAttack() {
+		return attack;
+	}
+	public void setAttack(int attack) {
+		this.attack = attack;
+	}
+	public boolean isRegi() {
+		return regi;
+	}
+	public void setRegi(boolean regi) {
+		this.regi = regi;
 	}
 }

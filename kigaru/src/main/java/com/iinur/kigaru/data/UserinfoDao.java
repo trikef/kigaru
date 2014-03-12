@@ -3,11 +3,13 @@ package com.iinur.kigaru.data;
 import java.sql.SQLException;
 
 import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.iinur.core.data.BaseDao;
+import com.iinur.kigaru.data.bean.Userinfo;
 
 public class UserinfoDao extends BaseDao{
 	private static final Logger log = LoggerFactory.getLogger(UserinfoDao.class);
@@ -30,6 +32,19 @@ public class UserinfoDao extends BaseDao{
 			userId = 0;
 		}
 		return userId;
+	}
+
+	public Userinfo get(String name) {
+		String sql = "SELECT * FROM user_info Where name=?";
+		Userinfo u = new Userinfo();
+		try {
+			ResultSetHandler<Userinfo> rsh = new BeanHandler<Userinfo>(Userinfo.class);
+			u = run.query(sql, rsh, name);
+		} catch (SQLException sqle) {
+			log.error(sqle.getMessage());
+			throw new RuntimeException(sqle.toString());
+		}
+		return u;
 	}
 
 	public void insert(String name){

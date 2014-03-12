@@ -10,8 +10,11 @@
 	<link rel="stylesheet" href="/css/main.css" />
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
 <!--<link rel="shortcut icon" href="../favicon.ico"> -->
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+	<script src="/js/main.js"></script>
 </head>
 <body>
 <div data-role="page" id="testpage">

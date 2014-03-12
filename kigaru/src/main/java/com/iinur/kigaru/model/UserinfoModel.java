@@ -3,6 +3,7 @@ package com.iinur.kigaru.model;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import com.iinur.kigaru.data.UserinfoDao;
+import com.iinur.kigaru.data.bean.Userinfo;
 
 public class UserinfoModel {
 
@@ -41,5 +42,10 @@ public class UserinfoModel {
 	public int getId(String name){
 		UserinfoDao udao = new UserinfoDao();
 		return udao.getId(name);
+	}
+	
+	public Userinfo get(String name){
+		UserinfoDao udao = new UserinfoDao();
+		return udao.get(name);
 	}
 }

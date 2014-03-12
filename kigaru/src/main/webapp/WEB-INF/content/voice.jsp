@@ -17,7 +17,8 @@
 	<script src="/js/main.js"></script>
 </head>
 <body>
-<div data-role="page" id="testpage">
+<div data-role="page" id="voicepage">
+	<div id="voice-effect"></div>
 	<div data-role="header">
 		<div data-role="navbar">
 			<ul>
@@ -148,39 +149,47 @@
 		</s:iterator>
 		</ul>
 		</s:if>
+		<div id="monster-state">
+			<p>モンスターHP</p>
+			<div class="progress progress-striped">
+				<div id="monster-hp" class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="<s:property value="voice.hp_state" />" aria-valuemin="0" aria-valuemax="100" style="width: <s:property value="voice.hp_state" />%">
+				</div>
+			</div>
+		</div>
 		<div class="command-tab"><h3><s:property value="name" /></h3></div>
 		<ul id="command-menu" data-role="listview" data-inset="true">
 			<li><a href="#command-comment" data-rel="popup" data-transition="pop">こうげき</a></li>
-			<li><a href="#command-plan">さくせん</a></li>
+<!--
+ 			<li><a href="#command-plan">さくせん</a></li>
 			<li><a href="#command-sympathy">きょうかん</a></li>
-			<li><a href="/">にげる</a></li>
+ -->
+ 			<li><a href="/">にげる</a></li>
 		</ul>
 	</div>
 	<div data-role="panel" id="command-comment" data-position="right" data-display="overlay" data-theme="a" class="ui-panel ui-panel-position-right ui-panel-display-overlay ui-body-a ui-panel-animate ui-panel-closed">
 		<div class="ui-panel-inner">
-			<form action="/voice/<s:property value="voice.id" />" method="post">
-     	<div data-role="popup" id="popupInfo-comment" class="ui-content" data-theme="a" style="max-width:350px;">
-			<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
-		  <p><strong>例1. </strong>突然理由も言わずに別れを言うなんてひどい人間だ。そんな人と結婚する前に別れられて良かったんじゃないかな。</p>
-		  <p><strong>例2. </strong>あなたが有能だからこそ仕事を頼まれる事が多いのでは</p>
-		  <p><strong>例3. </strong>店員は忙しくてついコーヒーを煮詰めてしまったのかも。Twitterで拡散して店が潰れたらあなたも後味の悪い事になってたかもしれないし文句を言わなくて良かったかも</p>
-		</div>
-		<div id="atack-comment" class="ui-field-contain">
-			<label for="text">ポジティブコメント！
-			<a href="#popupInfo-comment" data-rel="popup" data-transition="pop" class="ui-mini">ヒント</a>
-			</label>
-			<textarea rows="10" cols="40" name="text" class="form-control"
-					placeholder="モンスターはネガティブな考えに捕われている！ポジティブな視点で「うまれた理由」をとらえなおして解決案や擁護をコメントしてやっつけよう！"></textarea>
-			<span>200</span>
-		</div>
-		<input type="hidden" name="name" value="<s:property value="name" />">
-		<span class="input-group-btn">
-				<button type="submit" class="btn btn-default">こうげきする！</button>
+	     	<div data-role="popup" id="popupInfo-comment" class="ui-content" data-theme="a" style="max-width:350px;">
+				<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+			  <p><strong>例1. </strong>突然理由も言わずに別れを言うなんてひどい人間だ。そんな人と結婚する前に別れられて良かったんじゃないかな。</p>
+			  <p><strong>例2. </strong>あなたが有能だからこそ仕事を頼まれる事が多いのでは</p>
+			  <p><strong>例3. </strong>店員は忙しくてついコーヒーを煮詰めてしまったのかも。Twitterで拡散して店が潰れたらあなたも後味の悪い事になってたかもしれないし文句を言わなくて良かったかも</p>
+			</div>
+			<div id="atack-comment" class="ui-field-contain">
+				<label for="text">ポジティブコメント！
+				<a href="#popupInfo-comment" data-rel="popup" data-transition="pop" class="ui-mini">ヒント</a>
+				</label>
+				<textarea id="atack-comment-textarea" rows="10" cols="40" name="text" class="form-control"
+						placeholder="モンスターはネガティブな考えに捕われている！ポジティブな視点で「うまれた理由」をとらえなおして解決案や擁護をコメントしてやっつけよう！"></textarea>
+				<span>200</span>
+			</div>
+			<input type="hidden" name="name" value="<s:property value="name" />">
+			<span class="input-group-btn">
+				<a href="#demo-links" data-rel="close" onClick="Answer.comment(<s:property value="voice.id" />,'<s:property value="name" />','#atack-comment-textarea');" class="ui-btn ui-shadow ui-corner-all ui-btn-a">こうげきする！</a>
 			</span>
-		</form>
 			<a href="#demo-links" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left ui-btn-inline">もどる</a>
 		</div>
 	</div>
+<!-- 
 	<div data-role="panel" id="command-plan" data-position="right" data-display="overlay" data-theme="a" class="ui-panel ui-panel-position-right ui-panel-display-overlay ui-body-a ui-panel-animate ui-panel-closed">
 		<div class="ui-panel-inner">
 			coming soon
@@ -193,6 +202,7 @@
 			<a href="#demo-links" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left ui-btn-inline">もどる</a>
 		</div>
 	</div>
+ -->
 </div>
 </body>
 </html>

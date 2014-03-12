@@ -23,8 +23,9 @@ public class VoiceDao extends BaseDao {
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT ");
 		sql.append("v.id, v.user_id, v.who, v.place, v.title, v.text, v.melancholy, v.sad, v.worry, v.angry, v.think, ");
-		sql.append("v.unbalance_1, v.unbalance_2, v.unbalance_3, v.unbalance_4, v.unbalance_5, v.unbalance_6, v.unbalance_7, v.unbalance_8, v.unbalance_9, v.unbalance_10, ");
-		sql.append("v.monster, v.created_at, u.name, a.answernum ");
+		sql.append("v.unbalance_1, v.unbalance_2, v.unbalance_3, v.unbalance_4, v.unbalance_5, ");
+		sql.append("v.unbalance_6, v.unbalance_7, v.unbalance_8, v.unbalance_9, v.unbalance_10, ");
+		sql.append("v.monster, v.max_hp, v.hp, v.created_at, u.name, a.answernum ");
 		sql.append("FROM voice v ");
 		sql.append("LEFT JOIN user_info u ON v.user_id = u.id ");
 		sql.append("LEFT JOIN (SELECT voice_id, count(*) as answernum FROM answer GROUP BY voice_id) a ON v.id = a.voice_id ");
@@ -45,8 +46,9 @@ public class VoiceDao extends BaseDao {
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT ");
 		sql.append("v.id, v.user_id, v.who, v.place, v.title, v.text, v.melancholy, v.sad, v.worry, v.angry, v.think, ");
-		sql.append("v.unbalance_1, v.unbalance_2, v.unbalance_3, v.unbalance_4, v.unbalance_5, v.unbalance_6, v.unbalance_7, v.unbalance_8, v.unbalance_9, v.unbalance_10, ");
-		sql.append("v.monster, v.created_at, u.name, a.answernum ");
+		sql.append("v.unbalance_1, v.unbalance_2, v.unbalance_3, v.unbalance_4, v.unbalance_5, ");
+		sql.append("v.unbalance_6, v.unbalance_7, v.unbalance_8, v.unbalance_9, v.unbalance_10, ");
+		sql.append("v.monster, v.max_hp, v.hp, v.created_at, u.name, a.answernum ");
 		sql.append("FROM voice v ");
 		sql.append("LEFT JOIN user_info u ON v.user_id = u.id ");
 		sql.append("LEFT JOIN (SELECT voice_id, count(*) as answernum FROM answer GROUP BY voice_id) a ON v.id = a.voice_id ");
@@ -69,8 +71,9 @@ public class VoiceDao extends BaseDao {
 		sql.append("SELECT * FROM (");
 		sql.append("SELECT ");
 		sql.append("vi.id, vi.user_id, vi.who, vi.place, vi.title, vi.text, vi.melancholy, vi.sad, vi.worry, vi.angry, vi.think, ");
-		sql.append("vi.unbalance_1, vi.unbalance_2, vi.unbalance_3, vi.unbalance_4, vi.unbalance_5, vi.unbalance_6, vi.unbalance_7, vi.unbalance_8, vi.unbalance_9, vi.unbalance_10, ");
-		sql.append("vi.monster, vi.created_at, ui.name, a.answernum, ");
+		sql.append("vi.unbalance_1, vi.unbalance_2, vi.unbalance_3, vi.unbalance_4, vi.unbalance_5, ");
+		sql.append("vi.unbalance_6, vi.unbalance_7, vi.unbalance_8, vi.unbalance_9, vi.unbalance_10, ");
+		sql.append("vi.monster, vi.max_hp, vi.hp, vi.created_at, ui.name, a.answernum, ");
 		sql.append("ROW_NUMBER() OVER (PARTITION BY ui.name ORDER BY ui.name ASC) as nid ");
 		sql.append("FROM voice vi ");
 		sql.append("LEFT JOIN user_info ui ON vi.user_id = ui.id ");
@@ -108,15 +111,51 @@ public class VoiceDao extends BaseDao {
 		StringBuffer sql = new StringBuffer();
 		sql.append("INSERT INTO voice (");
 		sql.append("who, place, title, text, user_id, melancholy, sad, worry, angry, think,");
-		sql.append("unbalance_1, unbalance_2, unbalance_3, unbalance_4, unbalance_5, unbalance_6, unbalance_7, unbalance_8, unbalance_9, unbalance_10, monster");
-		sql.append(") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+		sql.append("unbalance_1, unbalance_2, unbalance_3, unbalance_4, unbalance_5,");
+		sql.append("unbalance_6, unbalance_7, unbalance_8, unbalance_9, unbalance_10, ");
+		sql.append("monster, max_hp, hp");
+		sql.append(") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
 		try {
+			int hp = getHp(melancholy, sad, worry, angry);
 			run.update(sql.toString(), who, place, title, text, userId,
 					melancholy, sad, worry, angry, think, unbalance_1,
 					unbalance_2, unbalance_3, unbalance_4, unbalance_5,
 					unbalance_6, unbalance_7, unbalance_8, unbalance_9,
-					unbalance_10,monster);
+					unbalance_10,monster,hp,hp);
+		} catch (SQLException sqle) {
+			log.error(sqle.getMessage());
+			throw new RuntimeException(sqle.toString());
+		}
+	}
+	
+	private int hp_magic = 5;//TODO autolearn (related zombie count)
+	private int getHp(int melancholy, int sad, int worry, int angry){
+		return (melancholy + sad + worry + angry) * hp_magic;
+	}
+
+	public void updateHp(int answerId, int valueAttack) {
+		StringBuffer sql = new StringBuffer();
+		sql.append("UPDATE voice v ");
+		sql.append("SET hp=v.hp-? ");
+		sql.append("WHERE v.id=(SELECT a.voice_id FROM answer a WHERE a.id=?)");
+
+		try {
+			run.update(sql.toString(), valueAttack, answerId);
+		} catch (SQLException sqle) {
+			log.error(sqle.getMessage());
+			throw new RuntimeException(sqle.toString());
+		}
+	}
+
+	public void updateHpFromUserId(int voiceId, int userId) {
+		StringBuffer sql = new StringBuffer();
+		sql.append("UPDATE voice v ");
+		sql.append("SET hp=v.hp-(SELECT attack FROM user_info u WHERE u.id=?) ");
+		sql.append("WHERE v.id=?");
+
+		try {
+			run.update(sql.toString(), userId, voiceId);
 		} catch (SQLException sqle) {
 			log.error(sqle.getMessage());
 			throw new RuntimeException(sqle.toString());

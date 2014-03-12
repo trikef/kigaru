@@ -26,6 +26,8 @@ public class Voice {
 	private boolean unbalance_9;
 	private boolean unbalance_10;
 	private String monster;
+	private int max_hp;
+	private int hp;
 	private Timestamp created_at;
 	private String name;
 	private int answernum;
@@ -162,6 +164,23 @@ public class Voice {
 	public void setMonster(String monster) {
 		this.monster = monster;
 	}
+	public int getMax_hp() {
+		return max_hp;
+	}
+	public void setMax_hp(int max_hp) {
+		this.max_hp = max_hp;
+	}
+	public int getHp() {
+		return hp;
+	}
+	public void setHp(int hp) {
+		this.hp = hp;
+	}
+	
+	public int getHp_state(){
+		return (int)(((double)hp / (double)max_hp)* 100);
+	}
+
 	public Timestamp getCreated_at() {
 		return created_at;
 	}

@@ -22,6 +22,8 @@ CREATE TABLE voice(
 	unbalance_9 BOOLEAN,
 	unbalance_10 BOOLEAN,
 	monster VARCHAR(30),
+	max_hp INTEGER,
+	hp INTEGER,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY(id)
 );
@@ -35,8 +37,18 @@ CREATE TABLE user_info(
 	sex CHAR(1),
 	birth DATE,
 	img VARCHAR(100),
+	level INTEGER DEFAULT 1,
+	ex INTEGER DEFAULT 0,
+	attack INTEGER DEFAULT 100,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY(id)
+);
+
+DROP TABLE IF EXISTS levels;
+CREATE TABLE levels(
+	num INTEGER NOT NULL,
+	ex INTEGER NOT NULL,
+	PRIMARY KEY(num)
 );
 
 DROP TABLE IF EXISTS monster;
@@ -56,6 +68,7 @@ CREATE TABLE answer(
 	voice_id INTEGER NOT NULL,
 	text TEXT NOT NULL,
 	user_id INTEGER,
+	attack INTEGER,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY(id)
 );

@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.iinur.kigaru.data.AnswerDao;
 import com.iinur.kigaru.data.UserinfoDao;
+import com.iinur.kigaru.data.VoiceDao;
 import com.iinur.kigaru.data.bean.Answer;
 
 public class AnswerModel {
@@ -15,6 +16,11 @@ public class AnswerModel {
 		return adao.get(voiceId);
 	}
 	
+	public Answer getNew(int voiceId, String name){
+		AnswerDao adao = new AnswerDao();
+		return adao.getNew(voiceId, name);
+	}
+
 	public Answer getSingle(int answerId){
 		AnswerDao adao = new AnswerDao();
 		return adao.getSingle(answerId);
@@ -29,11 +35,13 @@ public class AnswerModel {
 				udao.insert(name);
 				userId = udao.getId(name);
 			}
-			
 		}
 		
 		AnswerDao adao = new AnswerDao();
 		adao.insert(voiceId, userId, text);
+		
+		VoiceDao vdao = new VoiceDao();
+		vdao.updateHpFromUserId(voiceId, userId);
 	}
 
 	public int count(String name) {

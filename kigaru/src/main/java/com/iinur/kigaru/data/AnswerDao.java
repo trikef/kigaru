@@ -23,12 +23,14 @@ public class AnswerDao extends BaseDao{
 	public Answer getSingle(int answerId){
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT ");
-		sql.append("a.id, a.user_id, a.voice_id, a.text, a.created_at, u.name, av.good, av.bad ");
+		sql.append("a.id, a.user_id, a.voice_id, a.text, a.created_at, u.name, av.good, av.bad, ");
+		sql.append("CAST((CAST(hp AS double precision) /cast(max_hp AS double precision)*100) AS INTEGER) AS hp_state ");
 		sql.append("FROM answer a ");
 		sql.append("LEFT JOIN user_info u ON a.user_id = u.id ");
 		sql.append("LEFT JOIN (");
 		sql.append("SELECT answer_id, sum(good) as good, sum(bad) as bad FROM answer_value GROUP BY answer_id");
 		sql.append(") av ON a.id = av.answer_id ");
+		sql.append("LEFT JOIN voice v ON a.voice_id = v.id ");
 		sql.append("WHERE a.id = ? ");
 
 		Answer a = null;
@@ -43,6 +45,29 @@ public class AnswerDao extends BaseDao{
 		return a;
 	}
 	
+	public Answer getNew(int voiceId, String name) {
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT ");
+		sql.append("a.id, a.user_id, a.voice_id, a.text, a.created_at, u.name ");
+		sql.append("FROM answer a ");
+		sql.append("LEFT JOIN user_info u ON a.user_id = u.id ");
+		sql.append("WHERE voice_id = ? ");
+		sql.append("AND u.name = ? ");
+		sql.append("ORDER BY a.created_at DESC ");
+		sql.append("LIMIT 1");
+
+		Answer a = null;
+		try {
+			ResultSetHandler<Answer> rsh = new BeanHandler<Answer>(
+					Answer.class);
+			a = run.query(sql.toString(), rsh, voiceId, name);
+		} catch (SQLException sqle) {
+			log.error(sqle.getMessage());
+			throw new RuntimeException(sqle.toString());
+		}
+		return a;
+	}
+
 	public List<Answer> get(int voiceId){
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT ");
@@ -53,7 +78,7 @@ public class AnswerDao extends BaseDao{
 		sql.append("SELECT answer_id, sum(good) as good, sum(bad) as bad FROM answer_value GROUP BY answer_id");
 		sql.append(") av ON a.id = av.answer_id ");
 		sql.append("WHERE voice_id = ? ");
-		sql.append("ORDER BY a.created_at DESC");
+		sql.append("ORDER BY a.created_at ASC");
 
 		List<Answer> as = null;
 		try {
